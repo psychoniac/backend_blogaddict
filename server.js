@@ -2,7 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const { testConnection } = require('./config/database');
+const { testConnection, sequelize } = require('./config/database');
+const User = require('./models/User');
 
 dotenv.config();
 
@@ -16,6 +17,10 @@ app.get('/', (req, res) => {
 });
 
 testConnection();
+
+sequelize.sync({ force: true}).then(() => {
+    console.log('Les modèles ont été synchronisés avec la bdd');
+});
 
 const PORT = process.env.PORT || 3000;
 
